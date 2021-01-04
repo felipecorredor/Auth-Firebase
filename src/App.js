@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
+import { Admin } from './components/Admin';
+import { Auth } from './components/Auth';
+import { Home } from './components/Home';
+import { Layout } from './components/Layout';
+import { auth } from './firebase';
+import { PrivateRoute } from './PrivateRoute';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+  const [isAuth, setIsAuth] = useState(false)
+  React.useEffect(() => {
+    auth.onAuthStateChanged(function(user) {
+      if (user) {
+        if (user) {
+          setIsAuth(true)
+        }        
+      } else {
+        setIsAuth(null)
+      }
+    });
+  }, [])
+
+
+  return isAuth !== false ? (
+    <Router>
+      <Layout isAuth={isAuth}>                
+        <Switch>
+          <Route type="public" exact path="/" component={Home} />          
+          <Route type="public" exact path="/login" component={Auth} />
+          <PrivateRoute isAuth={isAuth} type="private" exact path="/admin" component={Admin} />
+        </Switch>        
+      </Layout>
+    </Router>    
+  ) : (
+    <p>Loading...</p>
+  )  
+  
 }
 
 export default App;
