@@ -2,14 +2,14 @@ import React, { useState } from 'react'
 import { useForm } from "react-hook-form";
 import { Form } from './Form';
 import { useHistory } from "react-router-dom";
-import { useSetUser } from '../hooks/useSetUser';
+import { UseSetUser } from '../hooks/UseSetUser';
 
 export const Auth = () => {
   const history = useHistory();
   const { register, handleSubmit, errors } = useForm();
   const [isRegister, setIsRegister] = useState(true)
   
-  const { error, createUser, loginUser } = useSetUser(history)
+  const { error, createUser, loginUser } = UseSetUser(history)
 
   const onSubmit = data => isRegister ? createUser(data) : loginUser(data)
 

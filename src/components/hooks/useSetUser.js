@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react'
 import { db, auth } from '../../firebase';
 
-export const useSetUser = history => {
-
+export const UseSetUser = history => {
+ 
   const [error, setError] = useState(null)
 
   const createUser = useCallback(async data => {  
@@ -19,10 +19,10 @@ export const useSetUser = history => {
       .catch(function(error) {
           console.error("Error writing document: ", error);
       });  
-
+      // Coleccion con la lista de tareas a un usuario creado
       db.collection(uid).add({
         name: 'Tarea ejemplo',
-        fecha: Date.now()
+        date: Date.now()
       })
       .then(function() {
           console.log("Document successfully written2!");
@@ -30,7 +30,6 @@ export const useSetUser = history => {
       .catch(function(error) {
           console.error("Error writing document: ", error);
       });  
-
 
       history.push('/admin');
     })
