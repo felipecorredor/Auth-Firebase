@@ -18,19 +18,7 @@ export const UseSetUser = history => {
       })
       .catch(function(error) {
           console.error("Error writing document: ", error);
-      });  
-      // Coleccion con la lista de tareas a un usuario creado
-      db.collection(uid).add({
-        name: 'Tarea ejemplo',
-        date: Date.now()
-      })
-      .then(function() {
-          console.log("Document successfully written2!");
-      })
-      .catch(function(error) {
-          console.error("Error writing document: ", error);
-      });  
-
+      });
       history.push('/admin');
     })
     .catch((error) => {

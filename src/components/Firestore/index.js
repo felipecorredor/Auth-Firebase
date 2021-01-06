@@ -33,7 +33,7 @@ export const Firestore = ({user}) => {
   const [open, setOpen] = useState(false);
   const [idDelete, setIdDelete] = useState(null)    
 
-  // CRUD 
+  // CUSTOM HOOKS
   const { create } = CreateTask(tasks, setTasks, ((message) => messageSnackBar(message)))
   const { editFirestore } = EditTask(tasks, setTasks, ((message) => messageSnackBar(message)), (() => createButton()))
   const { deleteFirestore } = DeleteTask(tasks, setTasks, (() => handleClose()), ((message) => messageSnackBar(message)))
