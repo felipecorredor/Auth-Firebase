@@ -1,22 +1,20 @@
 import React, { useState } from 'react'
 import { useForm } from "react-hook-form";
-import { Form } from './Form';
 import { useHistory } from "react-router-dom";
-import { UseSetUser } from '../hooks/UseSetUser';
+import { Reset } from '../hooks/Reset';
+import { Form } from './Form';
 
-export const Auth = () => {
+export const ResetPassword = () => {
   const history = useHistory();
   const { register, handleSubmit, errors } = useForm();
-  const [isRegister, setIsRegister] = useState(true)
-  
-  const { error, createUser, loginUser } = UseSetUser(history)
+  const { reset, error } = Reset(history)
 
-  const onSubmit = data => isRegister ? createUser(data) : loginUser(data)
+  const onSubmit = data => reset(data)
 
-  return (    
+  return (
     <div className="mt-5">
       <h3 className="text-center">
-        {isRegister ? 'Registro de usuarios' : 'Login de acceso'}
+        Recupera tu contraseña!
       </h3>
       <hr/>
         <div className="row justify-content-center">
@@ -26,9 +24,7 @@ export const Auth = () => {
             }
             <Form handleSubmit={handleSubmit(onSubmit)} 
                   register={register} 
-                  errors={errors} 
-                  isRegister={isRegister}
-                  setIsRegister={setIsRegister}
+                  errors={errors}
                   history={history} />
           </div>
         </div>

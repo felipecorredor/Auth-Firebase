@@ -2,7 +2,7 @@ import React from 'react'
 
 export const Form = ({ register, handleSubmit, errors, reset, edit, field }) => {    
   return (
-    <form onSubmit={handleSubmit} onReset={reset}>
+    <form onSubmit={handleSubmit} onReset={reset} autoComplete="off">
       <div className="mb-3">
         <label htmlFor="exampleInputEmail1" className="form-label">Name task</label>
         <input type="text" defaultValue={field.name} className="form-control" name="name" placeholder="task" ref={register({ required: true })} />

@@ -14,6 +14,7 @@ import { db } from '../../firebase';
 import { CreateTask } from '../hooks/CreateTask';
 import { EditTask } from '../hooks/EditTask';
 import { DeleteTask } from '../hooks/DeleteTask';
+import { NextTask } from '../hooks/NextTask';
 
 export const Firestore = ({user}) => {
 
@@ -24,6 +25,8 @@ export const Firestore = ({user}) => {
   const [tasks, setTasks] = useState([])
   const [edit, setEdit] = useState(false)
   const [field, setField] = useState({})    
+  const [ultimo, setUltimo] = useState(null)
+  const [desactivar, setDesactivar] = useState(false)
 
   // SACKBAR
   const [openSnack, setOpenSnack] = useState(false);
@@ -37,14 +40,29 @@ export const Firestore = ({user}) => {
   const { create } = CreateTask(tasks, setTasks, ((message) => messageSnackBar(message)))
   const { editFirestore } = EditTask(tasks, setTasks, ((message) => messageSnackBar(message)), (() => createButton()))
   const { deleteFirestore } = DeleteTask(tasks, setTasks, (() => handleClose()), ((message) => messageSnackBar(message)))
+  const { next } = NextTask(ultimo, tasks, setTasks, setUltimo, setDesactivar)
 
   // CALL TO API AND GET DATA OF FIRESTORE
   useEffect(() => {
     const fetchData = async () => {      
-      await db.collection(user.uid).get()
+      setDesactivar(true)
+      await db.collection(user.uid)
+      .limit(2)
+      .get()
       .then(querySnapshot => {      
         const arrayData = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data() }))
-        setTasks(arrayData)             
+        setTasks(arrayData)         
+        setUltimo(querySnapshot.docs[querySnapshot.docs.length - 1])
+        
+        const query = db.collection(user.uid)
+        .limit(1)
+        .startAfter(querySnapshot.docs[querySnapshot.docs.length - 1])
+        .get()
+        if (query.empty) {
+          setDesactivar(true)
+        } else {
+          setDesactivar(false)
+        }
       })
       .catch(err => {
         console.log('error', err)
@@ -104,9 +122,25 @@ export const Firestore = ({user}) => {
               <ArrayList tasks={tasks}                          
                          editData={editData} 
                          handleOpen={handleOpen} />         
-            </ul>
-            }
+            </ul>            
+            }      
+
+            <div className="col-md-6">              
+              <button className="btn btn-info mt-2" 
+                      onClick={() => next(user.uid)}
+                      disabled={desactivar}>
+                  Siguiente
+              </button>            
+              {/* Button Back */}   
+              
+                <button className="btn btn-primary mt-2 offset-md-5">
+                    Atras
+                </button>        
+              
+            </div>      
+
           </div>
+
           <div className="col-md-6">
             <div className="d-flex">
               <h3 style={{width: '100%'}}>{ edit ? 'Edit Task' : 'Add Task' }</h3>

@@ -1,8 +1,8 @@
 import React from 'react'
 
-export const Form = ({ handleSubmit, register, errors, setIsRegister, isRegister }) => {
+export const Form = ({ handleSubmit, register, errors, setIsRegister, isRegister, history }) => {
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} autoComplete="off">
       <input type="email" 
               ref={register({
                 required: "required",
@@ -26,13 +26,27 @@ export const Form = ({ handleSubmit, register, errors, setIsRegister, isRegister
           placeholder="Ingrese Contraseña" />   
           {errors.password && <span role="alert">{errors.password.message}</span>}
      
-      <p style={{ cursor: 'pointer' }} className="text-dark" onClick={() => setIsRegister(!isRegister)}>
-        {isRegister ? '¿Ya estas registrado?' : '¿No tienes cuenta?'}  
-      </p>
+     
+        <div className="row">
+          <div className="col-md-6">
+            <p style={{ cursor: 'pointer' }} className="text-dark" onClick={() => setIsRegister(!isRegister)}>
+              {isRegister ? '¿Ya estas registrado?' : '¿No tienes cuenta?'}  
+            </p>
+          </div>
+
+          <div className="col-md-6">
+            { !isRegister &&
+              <p style={{ cursor: 'pointer' }} className="text-dark text-end" onClick={() => history.push('/reset-password')}>
+                Recuperar contraseña
+              </p>
+            }  
+          </div>
+        </div>     
 
       <button className="btn btn-dark btn-lg btn-block" style={{ width: '100%' }} type="submit" >
         {isRegister ? 'Registrarse' : 'Acceder'} 
-      </button>      
+      </button>
+
     </form>
   )
 }

@@ -4,6 +4,7 @@ import { Admin } from './components/Admin';
 import { Auth } from './components/Auth';
 import { Home } from './components/Home';
 import { Layout } from './components/Layout';
+import { ResetPassword } from './components/ResetPassword';
 import { auth } from './firebase';
 import { PrivateRoute } from './PrivateRoute';
 
@@ -29,6 +30,7 @@ function App() {
         <Switch>
           <Route type="public" exact path="/" component={Home} />          
           <Route type="public" exact path="/login" component={Auth} />
+          <Route type="public" exact path="/reset-password" component={ResetPassword} />
           <PrivateRoute isAuth={isAuth} type="private" exact path="/admin" component={Admin} />
         </Switch>        
       </Layout>
